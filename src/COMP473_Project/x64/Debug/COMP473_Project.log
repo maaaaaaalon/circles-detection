@@ -1,0 +1,8 @@
+﻿  Main.cpp
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_basicHough\src\Main.cpp(93,16): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_basicHough\src\Main.cpp(93,55): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_basicHough\src\Main.cpp(94,17): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_basicHough\src\Main.cpp(94,56): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_basicHough\src\Main.cpp(95,18): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_basicHough\src\Main.cpp(95,57): warning C4018: '>': signed/unsigned mismatch
+  COMP473_Project.vcxproj -> D:\Concordia\COMP\COMP473\Project\COMP473_Project_basicHough\x64\Debug\COMP473_Project.exe
