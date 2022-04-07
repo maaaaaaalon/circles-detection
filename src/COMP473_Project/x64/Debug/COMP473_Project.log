@@ -1,0 +1,9 @@
+﻿  Main.cpp
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_CompatiblePairs\src\Main.cpp(137,16): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_CompatiblePairs\src\Main.cpp(137,55): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_CompatiblePairs\src\Main.cpp(138,17): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_CompatiblePairs\src\Main.cpp(138,56): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_CompatiblePairs\src\Main.cpp(139,18): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_CompatiblePairs\src\Main.cpp(139,57): warning C4018: '>': signed/unsigned mismatch
+D:\Concordia\COMP\COMP473\Project\COMP473_Project_CompatiblePairs\src\Main.cpp(111,7): warning C4101: 'd': unreferenced local variable
+  COMP473_Project.vcxproj -> D:\Concordia\COMP\COMP473\Project\COMP473_Project_CompatiblePairs\x64\Debug\COMP473_Project.exe
