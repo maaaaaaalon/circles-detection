@@ -3,17 +3,18 @@
 #include <vector>
 #include <stack>
 #include <math.h>
-#define verbose
-
+#define verbose /*gives more detail*/
+#define trackTime /*tracks elapsed time in each iteration*/
+//define s4e /*gives error rate (false positives) for image 4*/
 #include "COMP473_Project/Functions.h"
 
 int main(int argc, char* argv[]) {
 
 	//cout << argv[0] << endl;//Get PWD
 	//Mat img = imread("../../sample_images/s1.PNG");
-	//Mat img = imread("../../sample_images/s2.PNG");
-	//Mat img = imread("../../sample_images/S3.jpg");//Too large
-	Mat img = imread("../../sample_images/s4.jpg");
+	//Mat img = imread("../../sample_images/s2.PNG");//Random Logo
+	//Mat img = imread("../../sample_images/S3.jpg");//Too large, takes 3 minutes to process
+	Mat img = imread("../../sample_images/s4.jpg");//Coins
 
 	Mat output;
 	if (img.empty()) {
@@ -47,7 +48,7 @@ int main(int argc, char* argv[]) {
 	//cv::cvtColor(dy, dyM, cv::COLOR_RGB2GRAY);
 	dyM = dy;
 	//imshow("dy", dy);
-	Mat dyMv = cv::abs(dyM*(short)16);
+	Mat dyMv = cv::abs(dyM*(short)32);
 	imshow("dyM", dyMv);
 
 	Mat Edges;
@@ -71,12 +72,14 @@ int main(int argc, char* argv[]) {
 	int Rmin = 5;
 	cv::createTrackbar("Min Radius", "Controls", &Rmin, 25);
 	int record = 0;
-	cv::createTrackbar("Record", "Controls", &record, 2, &fPrintImage, (void*)&output);
+	//cv::createTrackbar("Record", "Controls", &record, 2, &fPrintImage, (void*)&output);
+	cv::createTrackbar("Record", "Controls", &record, 1, &fPrintImage, (void*)&output);
 	//cv::createButton("Print Image", &fPrintImage, &output, cv::QtButtonTypes::QT_PUSH_BUTTON);
 	
 	//int NR = 45;
 	int NR = 35;
-	unsigned int* ac = new unsigned int[NR * (long long)h * w];
+	//unsigned int* ac = new unsigned i0nt[NR * (long long)h * w];
+	unsigned short* ac = new unsigned short[NR * (long long)h * w];
 	if (ac == nullptr) {
 		cout << "failed to allocate sufficient memory." << endl;
 		cerr << "Something went wrong, press any button to exit." << endl;
@@ -105,12 +108,16 @@ int main(int argc, char* argv[]) {
 	#ifdef verbose
 	cout << "Number of edge points: " << nP << endl;
 	#endif
+	
+	
 
 	while (!(KEY('C')) || !(KEY(VK_LCONTROL))) {
-		cout << "beginning compuation" << endl;
+		cout << "beginning computation" << endl;
 		int d;
-		
-		ZeroMemory(ac, NR * (long long)h * (long long)w * sizeof(unsigned int));
+		#ifdef trackTime
+		auto started = std::chrono::high_resolution_clock::now();
+		#endif
+		ZeroMemory(ac, NR * (long long)h * (long long)w * sizeof(unsigned short));
 		std::stack<std::pair<int, int>>  s1(edgePoints);
 		while (!s1.empty()) {
 			std::pair<int, int> P1 = s1.top(); s1.pop();
@@ -129,6 +136,9 @@ int main(int argc, char* argv[]) {
 		
 		double Tr = TR100 / 100.0;
 		output = img.clone();
+		#ifdef s4e
+		int nC = 0;
+		#endif
 		for (int i = 1; i < h - 1; ++i) {
 			for (int j = 1; j < w - 1; ++j) {
 				for (int k = 1; k < NR; ++k) {
@@ -136,9 +146,13 @@ int main(int argc, char* argv[]) {
 					if ( temp > Tr * (k + Rmin)) {
 						if (temp > ac[(i + j * h) * NR + k - 1] && temp > ac[(i + j * h) * NR + k + 1]) {
 							if (temp > ac[(i - 1 + j * h) * NR + k] && temp > ac[(i+1 + j * h) * NR + k])
-								if (temp > ac[(i + (j-1) * h) * NR + k] && temp > ac[(i + (j + 1) * h) * NR + k])
+								if (temp > ac[(i + (j - 1) * h) * NR + k] && temp > ac[(i + (j + 1) * h) * NR + k]) {
 									cv::circle(output, cv::Point(j, i), k + Rmin, cv::Scalar(255, 255,0), 2);
-									//cv::circle(output, cv::Point(i, j), k + Rmin, cv::Scalar(0, 255, 255));
+									#ifdef s4e
+									++nC;
+									#endif
+								}
+									
 						}
 					}
 				}
@@ -157,6 +171,17 @@ int main(int argc, char* argv[]) {
 		cout << "Percent Utilization: " << ((((long long)NR) * ((long long)w) * ((long long)h) - NumZeros)) * 100.0 / (((long long)NR) * ((long long)w) * ((long long)h)) << "%" << endl;
 		cout << "-----------------------" << endl << endl;
 		#endif
+
+		#ifdef trackTime
+		auto done = std::chrono::high_resolution_clock::now();
+		cout << "Elapsed time: ";
+		cout << std::chrono::duration_cast<std::chrono::milliseconds>(done - started).count() << " (ms)" << endl;
+		#endif
+
+		#ifdef s4e
+		cout << "Number of false positives: " << nC - 8 << endl;
+		#endif
+
 		c = (char)waitKey(0);
 		if (c == 27) {//ESC
 			break;
